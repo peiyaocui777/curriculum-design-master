@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/charpter17/charpter17.iml" filepath="$PROJECT_DIR$/charpter17/charpter17.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/curriculum-design-master.iml" filepath="$PROJECT_DIR$/.idea/curriculum-design-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tests/tests.iml" filepath="$PROJECT_DIR$/tests/tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/untitled/untitled.iml" filepath="$PROJECT_DIR$/untitled/untitled.iml" />
+    </modules>
+  </component>
+</project>
