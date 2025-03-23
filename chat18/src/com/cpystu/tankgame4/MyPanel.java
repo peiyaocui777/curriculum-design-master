@@ -54,9 +54,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
             enemyTanks.add(enemyTank);//把这个坦克放到集合里面
         }
         //初始化image对象
-        image1=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/.bomb1.jpg"));
-        image2=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/.bomb2.jpg"));
-        image3=Toolkit.getDefaultToolkit().getImage(Panel.class.getResource("/.bomb3.jpg"));
+        image1 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb1.jpg");
+        image2 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb2.jpg");
+        image3 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb3.jpg");
     }
     //调用paint方法绘图
 
@@ -79,9 +79,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
         //遍历画炸弹
         for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb = bombs.get(i);
-            if (bomb.life>6){
+            if (bomb.life>80){
                 g.drawImage(image1,bomb.x,bomb.y,60,60,this);
-            } else if (bomb.life>3) {
+            } else if (bomb.life>60) {
                 g.drawImage(image2,bomb.x,bomb.y,60,60,this);
             }else {
                 g.drawImage(image3,bomb.x,bomb.y,60,60,this);
@@ -183,11 +183,14 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
             case 0:
             case 2://穿透
                 if (s.x > enemyTank.getX() && s.x < enemyTank.getX() + 40 && s.y > enemyTank.getY() && s.y < enemyTank.getY() + 60) {
+                    System.out.println(enemyTank);
                     s.isLive = false;
                     enemyTank.isLive = false;
                     //坦克被击中，bombs中放入三张图片
                     Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+                    System.out.println(bomb.toString());
                     bombs.add(bomb);
+                    System.out.println(bombs.size());
                 }
                 break;
             case 1:
@@ -272,12 +275,17 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
             //每隔50ms调用一次hitTank()判断子弹有没有击中坦克
             //先判断子弹是否存活，存活状态下遍历敌方的坦克，进一步判断是否击中
             if (hero.shot != null && hero.shot.isLive) {//它本身就是Boolean值 直接这样写就可以 不用判断 是否为true
-                for (EnemyTank enemyTank : enemyTanks) {//这是啥意思 增强for 循环 跟for循环一个意思
+                for (int i = 0; i < enemyTanks.size(); i++) {
+                    EnemyTank enemyTank = enemyTanks.get(i);
+                    hitTank(hero.shot, enemyTank);
+                    if (!enemyTank.isLive) {
+                        enemyTanks.remove(i);
+                    }
+                } //这是啥意思 增强for 循环 跟for循环一个意思
                     //拿到坦克
                     //传到hitTank()
-                    hitTank(hero.shot, enemyTank);
-                    enemyTanks.remove(enemyTank);
-                }//那三个都是一个意思 ok 怎么用的 list 集合 使用 欧克！是看着优雅 当然还有性能
+
+                //那三个都是一个意思 ok 怎么用的 list 集合 使用 欧克！是看着优雅 当然还有性能
                 // 不都是循环那个我好理解 fori 好理解 看着明白 for 看着优雅 写 习惯了都一样 欧克 我继续了
             }
             this.repaint();

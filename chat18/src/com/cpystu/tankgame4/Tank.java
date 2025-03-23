@@ -62,4 +62,10 @@ public class Tank {
     public void setY(int y) {
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+
+        return super.toString();
+    }
 }

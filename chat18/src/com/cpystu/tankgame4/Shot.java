@@ -51,7 +51,7 @@ public class Shot implements Runnable {
                     x -= speed;//以speed的速度向左移动
                     break;
             }
-            System.out.println("x=" + x + "y=" + y);//用+号拼接
+//            System.out.println("x=" + x + "y=" + y);//用+号拼接
             if (!(x > 0 && x < 1000 && y > 0 && y <= 750)) {//子弹出界
                 //修改子弹的状态为false，表示子弹已销毁
                 isLive = false;
