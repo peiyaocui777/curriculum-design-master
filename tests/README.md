@@ -30,7 +30,7 @@ enum Day {
 ```
 使用时就像调用一个类的对象：
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Day today = Day.MONDAY;  // 今天是星期一
         System.out.println("今天是: " + today);  // 输出: 今天是: MONDAY
@@ -67,7 +67,7 @@ enum Color {
 ```
 **使用示例：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Color myColor = Color.RED;
         System.out.println("颜色描述: " + myColor.getDescription());  // 输出: 颜色描述: 红色
@@ -88,7 +88,7 @@ Java 为枚举内置了一些超级好用的方法：
 
 **示例：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         // 用 values() 遍历所有枚举值
         System.out.println("所有星期:");
@@ -110,7 +110,7 @@ public class Main {
 ### 1.6 枚举在 switch 语句中的应用
 枚举和 `switch` 是绝配，因为枚举值是固定的，非常适合做条件判断。
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Day today = Day.MONDAY;
         switch (today) {
@@ -153,7 +153,7 @@ enum Color implements Describable {
     }
 }
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Color color = Color.BLUE;
         System.out.println(color.getDescription());  // 输出: 蓝色
@@ -202,7 +202,7 @@ Java 提供了 5 个关键字来处理异常：
 ### 2.4 基本异常处理示例
 **简单例子：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         try {
             int result = 10 / 0;  // 除以零，会抛出 ArithmeticException
@@ -223,7 +223,7 @@ public class Main {
 
 **多重 catch：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         try {
             int[] numbers = {1, 2, 3};
@@ -254,7 +254,7 @@ class MyException extends Exception {
     }
 }
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void checkAge(int age) throws MyException {
         if (age < 18) {
             throw new MyException("年龄太小，不能参加活动！");
@@ -280,7 +280,7 @@ public class Main {
 ### 2.6 异常的传播
 如果一个方法抛出异常但没处理，异常会传给调用它的方法，直到被捕获或传到 `main` 方法（程序崩溃）。
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void method1() throws Exception {
         throw new Exception("出错了！");
     }
@@ -339,7 +339,7 @@ class Box<T> {  // T 是类型参数，可以是任意名字
     }
 }
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Box<String> stringBox = new Box<>();  // T 被指定为 String
         stringBox.setItem("Hello");
@@ -357,7 +357,7 @@ public class Main {
 ### 3.4 泛型方法
 不仅类可以用泛型，方法也可以单独用泛型：
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static <T> void printArray(T[] array) {  // T 是方法级别的泛型参数
         for (T element : array) {
             System.out.println(element);
@@ -384,7 +384,7 @@ public class Main {
 ```java
 import java.util.*;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void printList(List<?> list) {  // 接受任意类型的 List
         for (Object item : list) {
             System.out.println(item);
@@ -429,7 +429,7 @@ Java 提供了很多现成的类，帮我们快速解决问题。以下是最常
 
 **示例：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         String str = "Hello, Java!";
         System.out.println("长度: " + str.length());          // 输出: 12
@@ -448,7 +448,7 @@ public class Main {
 
 **示例：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder("Hello");
         sb.append(" World");      // 添加
@@ -471,7 +471,7 @@ public class Main {
 
 **示例：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         System.out.println(Math.abs(-5));      // 输出: 5
         System.out.println(Math.sqrt(16));     // 输出: 4.0
@@ -489,7 +489,7 @@ public class Main {
 ```java
 import java.util.*;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Date date = new Date();
         System.out.println("现在: " + date);
@@ -509,7 +509,7 @@ public class Main {
 ```java
 import java.util.Arrays;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         int[] numbers = {5, 2, 8, 1};
         Arrays.sort(numbers);                          // 排序
@@ -526,7 +526,7 @@ public class Main {
 
 **示例：**
 ```java
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         System.out.println("时间戳: " + start);
@@ -551,7 +551,7 @@ public class Main {
 ```java
 import java.util.*;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();
         list.add("Apple");
@@ -573,7 +573,7 @@ public class Main {
 ```java
 import java.util.*;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Set<String> set = new HashSet<>();
         set.add("Apple");
@@ -594,7 +594,7 @@ public class Main {
 ```java
 import java.util.*;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         Map<String, Integer> map = new HashMap<>();
         map.put("Apple", 1);
@@ -654,7 +654,7 @@ list.add("Hello");
 ```java
 import java.util.*;
 
-public class Main {
+public class com.cpystu.threaduse.Main {
     public static void main(String[] args) {
         List<Integer> list = new ArrayList<>(Arrays.asList(3, 1, 4));
         Collections.sort(list);

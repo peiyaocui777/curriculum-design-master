@@ -1,9 +1,12 @@
 package com.cpystu.houserent.domain;
 
+import lombok.Data;
+
 /*
   House类在domain包里面
 * House的对象就表示一个房屋信息
 * */
+@Data
 public class House {
     public House(int id, String name, String phone, String address, int rent, String state) {
         this.id = id;

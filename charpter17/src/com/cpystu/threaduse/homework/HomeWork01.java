@@ -1,10 +1,16 @@
-package com.cpystu.basic.threaduse.homework;
+package com.cpystu.threaduse.homework;
 /*
  * 在main方法中启动两个线程
  * 第一个线程A循环打印100以内整数
  * 直到第二个线程B从键盘读取了“Q”命令*/
 
-import com.cpystu.basic.Breaktest;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Scanner;
 
@@ -15,22 +21,30 @@ import java.util.Scanner;
 //2.直接在B类创建一个A类对象
 public class HomeWork01 {
     public static void main(String[] args) {
+        //TODO 第一步 创建A对象
         A a = new A();
         a.start();
+        //TODO 传入A对象
         B b = new B(a);//构造方法
-       //b.setA(a);//set方法
+//       b.setA(a);//set方法
         b.start();
     }
 }
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor//wucan
+//@Slf4j
 class A extends Thread {
     private boolean Loop = true;//Loop变量控制循环
+private static final Logger logger = LoggerFactory.getLogger(A.class);
+
 
     @Override
     public void run() {
         while (Loop) {
             //Math.random取得0-1之间的随机数，双精度类型
             System.out.println((int) (Math.random() * 100 + 1));
+            logger.debug("sss {},A {}",Loop,A.class);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -44,24 +58,30 @@ class A extends Thread {
         Loop = loop;
     }
 }
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 class B extends Thread {
-    //持有A的对象
-    private A a;
-
-    public B(A a) {
-        this.a = a;
-    }
-
-    private Scanner MyScanner = new Scanner(System.in);//??需要从前往后写，不能先new 再.var
-
     public A getA() {
         return a;
     }
 
-    public void setA(A a) {
+    public void setA(A a) { //TODO 设置值时候才调用
         this.a = a;
     }
+
+    //持有A的对象
+    private A a;
+
+    public B(A a) {
+        //TODO 构造方法 创建对象  A为属性 传入A
+        this.a = a;//TODO this 就是B.set A 类似set方法 一个创建对象的时候就要传入
+    }
+
+    private Scanner MyScanner = new Scanner(System.in);//??需要从前往后写，不能先new 再.var
+
+
     //重写run方法
 
     @Override
