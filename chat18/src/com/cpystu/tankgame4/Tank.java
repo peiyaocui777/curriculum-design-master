@@ -4,6 +4,7 @@ public class Tank {
     private int direct;//坦克的方向 默认为0
     int speed = 2;//设置变量控制坦克速度
     private int x;
+    boolean isLive=true;
 
     public int getDirect() {
         return direct;
@@ -14,7 +15,7 @@ public class Tank {
     }
 
     private int y;
-    boolean isLive = true;
+   // boolean isLive = true;
 
     public Tank(int x, int y) {
         this.x = x;

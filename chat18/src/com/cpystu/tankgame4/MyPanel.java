@@ -28,7 +28,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
     Vector<EnemyTank> enemyTanks = new Vector<>();
     int enemyTankSize = 3;//用变量控制敌方坦克数量
     //定义一个vector存放Bomb
-    //TODO 当子弹击中坦克时把图片放进Vector里面？？
+    //TODO 当子弹击中坦克时把图片放进Vector里面？？ 是
     Vector<Bomb> bombs=new Vector<>();
 
     //定义三个Image并初始化为空，在构造器里面给值
@@ -39,7 +39,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
     public MyPanel() {
         //初始化一个 子弹 在面板上//不需要，因为子弹作为坦克的属性可以通过坦克对象获取
         //再创建并初始化一个子弹会造成有多个子弹对象，调用出错
-        hero = new Hero(100, 100);//初始化  我方坦克
+        hero = new Hero(500, 100);//初始化  我方坦克
         //shot = new Shot(hero.getX(), hero.getY(), hero.getDirect());  //或者在这里new 然后设置 hero.set shot //toDO 要么在这里 要么zaihero 类
         //创建坦克的时候设置它的速度
         //hero.setSpeed(3);默认为1
@@ -68,7 +68,10 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
         super.paint(g);
         g.fillRect(0, 0, 1000, 750);//填充矩形，默认黑色
         //画自己坦克-封装到方法里面
-        drawTank(hero.getX(), hero.getY(), g, hero.getDirect(), 0);
+        //我方坦克hero不为空且存活状态下draw
+        if (hero != null && hero.isLive) {//TODO 问题1：为什么这个地方需要判断hero是否为空，hitHero（）里不判断
+            drawTank(hero.getX(), hero.getY(), g, hero.getDirect(), 0);//TODO 问题2：hero被击中后不需要remove吗 怎么消失的
+        }
         //画出子弹，绘制之前先判断一下子弹的状态，如果子弹不为空并且是存活状态再绘制
         //遍历vector集合，取出所有子弹
         for (int i = 0; i < hero.shots.size(); i++) {
@@ -192,30 +195,50 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
     }
 
     //编写hitTank（）,实现子弹击中坦克后坦克消失的效果
-    public  void hitTank(Shot s, EnemyTank enemyTank) {//传参
-        switch (enemyTank.getDirect()) {//判断敌人坦克的方向，用于确定子弹进入哪个区域实现击中
+    public void hitTank(Shot s, Tank Tank) {//传参 TODO 这个方法实现的是子弹是否击中坦克，击中了就触发爆炸效果
+        //TODO 不论是enemyTank还是hero,可以把形参
+        //TODO 改成enemyTank与hero的父类Tank，这样就不用重新再写一个方法判断hero有没有被击中了
+        switch (Tank.getDirect()) {//判断敌人坦克的方向，用于确定子弹进入哪个区域实现击中
             case 0:
             case 2://穿透
-                if (s.x > enemyTank.getX() && s.x < enemyTank.getX() + 40 && s.y > enemyTank.getY() && s.y < enemyTank.getY() + 60) {
-                    System.out.println(enemyTank);
+                if (s.x > Tank.getX() && s.x < Tank.getX() + 40 && s.y > Tank.getY() && s.y < Tank.getY() + 60) {
+                    System.out.println(Tank);
                     s.isLive = false;
-                    enemyTank.isLive = false;
+                    Tank.isLive = false;
                     //坦克被击中，bombs中放入三张图片
-                    Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+                    Bomb bomb = new Bomb(Tank.getX(), Tank.getY());
                     System.out.println(bomb.toString());
                     bombs.add(bomb);
                 }
                 break;
             case 1:
             case 3:
-                if (s.x > enemyTank.getX() && s.x < enemyTank.getX() + 60 && s.y > enemyTank.getY() && s.y < enemyTank.getY() + 40) {
+                if (s.x > Tank.getX() && s.x < Tank.getX() + 60 && s.y > Tank.getY() && s.y < Tank.getY() + 40) {
                     s.isLive = false;
-                    enemyTank.isLive = false;
-                    Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+                    Tank.isLive = false;
+                    Bomb bomb = new Bomb(Tank.getX(), Tank.getY());
                     bombs.add(bomb);
                 }
                 break;
 
+        }
+    }
+
+    //编写一个方法，判断敌方坦克的子弹是否击中我方hero
+    public void hitHero() {
+        //遍历敌方的enemyTanks集合
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            //得到一个坦克
+            EnemyTank enemyTank = enemyTanks.get(i);
+            //遍历enemyTank的shots集合
+            for (int j = 0; j < enemyTank.shots.size(); j++) {
+                //得到1颗子弹
+                Shot shot = enemyTank.shots.get(j);
+                //调用hitTank()判断这颗子弹有没有进入到我方坦克区域，进入区域就触发爆炸效果
+                if (hero.isLive && shot.isLive) {//判断条件：hero是存活状态，且子弹存活 TODO hero中没有isLive的属性，直接把这个属性放在父类Tank中
+                    hitTank(shot, hero);
+                }
+            }
         }
     }
     //写一个方法，遍历我方所有的子弹，敌方所有的坦克，确保每颗子弹都能有效击中
@@ -336,6 +359,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
                 // 不都是循环那个我好理解 fori 好理解 看着明白 for 看着优雅 写 习惯了都一样 欧克 我继续了
             }*/
             hitEnemyTank();
+            hitHero();//是否击中我方坦克
             this.repaint();
         }
     }

@@ -27,7 +27,7 @@ public class Shot implements Runnable {
 
     @Override
     public void run() {
-        speed = 2;
+        speed = 4;
         //run方法中实现子弹的发射
         while (true) {//不停的发射子弹，直到打中敌人/达到边界 子弹消失（退出）
             //线程休眠

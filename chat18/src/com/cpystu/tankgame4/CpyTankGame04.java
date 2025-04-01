@@ -1,6 +1,8 @@
 package src.com.cpystu.tankgame4;
 
 
+import lombok.Synchronized;
+
 import javax.swing.*;
 
 public class CpyTankGame04 extends JFrame {
@@ -9,7 +11,7 @@ public class CpyTankGame04 extends JFrame {
     public static void main(String[] args) {
         new CpyTankGame04();
     }
-
+//@Synchronized
     public CpyTankGame04() {
         mp = new MyPanel();
         //启动MyPanel线程
