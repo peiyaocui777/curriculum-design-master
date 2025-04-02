@@ -46,6 +46,8 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
         //使用for循环初始化 敌人的坦克
         for (int i = 0; i < enemyTankSize; i++) {
             EnemyTank enemyTank = new EnemyTank((100 * (i + 1)), 0);//得到坦克
+            //todo 使enemyTank持有enemyTanks集合，即能够得到enemyTanks的对象 不是很理解
+            enemyTank.setEnemyTanks(enemyTanks);
             enemyTank.setDirect(2);//
             new Thread(enemyTank).start();//创建敌人坦克时启动线程
             //给该enemyTank对象加入一颗子弹（后期可以加多颗），即在这里创建一颗子弹并设置子弹坐标
@@ -61,12 +63,27 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
         image2 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb2.jpg");
         image3 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb3.jpg");
     }
+    //编写一个方法，使得界面上显示出当前击毁敌人坦克数的信息
+    public void showInfo(Graphics g){//需要在面板上画出来，传入参数Graphics g
+        //画出“玩家总成绩”
+        g.setColor(Color.black);//字体的颜色
+        Font font = new Font("宋体", Font.BOLD, 25);//Font.BOLD 粗体
+        //把字体设置给画笔
+        g.setFont(font);
+        //画一个字符串
+        g.drawString("您累计击毁敌方坦克：",1020,30);
+        drawTank(1020,60,g,0,0);
+        g.setColor(Color.black);//重置画笔颜色
+        g.drawString(Recorder.getAllEnemyTankNum()+"",1080,100);//todo Recorder.getAllEnemyTankNum()+""把int转成字符串，变量接收
+    }
     //调用paint方法绘图
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         g.fillRect(0, 0, 1000, 750);//填充矩形，默认黑色
+        //调用showInfo()画出信息
+        showInfo(g);
         //画自己坦克-封装到方法里面
         //我方坦克hero不为空且存活状态下draw
         if (hero != null && hero.isLive) {//TODO 问题1：为什么这个地方需要判断hero是否为空，hitHero（）里不判断
@@ -254,8 +271,16 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
                     //判断enemyTank
                     if (enemyTank!=null&&enemyTank.isLive){
                         hitTank(shot,enemyTank);
+                        //Recorder.addAllEnemyTankNum();要放在remove（）语句后面
+                        //Record类中的addAllEnemyTankNum方法是static静态方法，可以不new,通过类名直接调用
                         if (!enemyTank.isLive) {
                             enemyTanks.remove(enemyTank);
+                            Recorder.addAllEnemyTankNum();
+                            /*//todo 试一下积分加加放在这里可以不 没有效果 为什么
+                        总结：todo 没有效果是因为showInfo()方法里面的   g.drawString（）中的参数没有用变量接收
+                            Recorder.addAllEnemyTankNum();放在这里，相较于放在hitTank()中
+                            不需要先判断他的运行类型是 enemyTank再执行该语句
+                            */
                         }
                     }
                 }

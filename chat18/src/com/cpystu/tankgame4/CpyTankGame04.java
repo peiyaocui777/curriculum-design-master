@@ -4,6 +4,8 @@ package src.com.cpystu.tankgame4;
 import lombok.Synchronized;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CpyTankGame04 extends JFrame {
     MyPanel mp = null;//这条语句要放在CpyTankGame01类里面构造器才可以直接使用
@@ -20,10 +22,19 @@ public class CpyTankGame04 extends JFrame {
         thread.start();
         //thread1.start();
         this.add(mp);
-        this.setSize(1000, 750);
+        this.setSize(1500, 800);
         //添加add一个监听事件，使组件能监听mp MyPanel的键盘事件
         this.addKeyListener(mp);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+
+        //在JFrame中增加响应关闭窗口的处理
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Recorder.keepRecord();
+                System.exit(0);
+            }
+        });
     }
 }

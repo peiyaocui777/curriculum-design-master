@@ -33,9 +33,16 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
                             //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+60）
                             //2.this坦克的左上角坐标为（getX(),getY()）,右上角坐标为（getX()+40,getY()）
                             //3.判断方法：this的左右两个坐标在enemyTank的x、y坐标范围内，说明两个坦克重合了
-                            if (this.getX() >= enemyTank.getX() && this.getX() <= enemyTank.getX() + 40
-                                    && this.getY() >= enemyTank.getY() && this.getY() <= enemyTank.getY() + 60
-                                    && this.getX() + 40 >= enemyTank.getX() && this.getX() + 40 <= enemyTank.getX() + 40) {//todo 写一起不行吗
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 40
+                                    && this.getY() >= enemyTank.getY()
+                                    && this.getY() <= enemyTank.getY() + 60) {//todo 写一起不行吗
+                                return true;
+                            }
+                            if (this.getX() + 40 >= enemyTank.getX()
+                                    && this.getX() + 40 <= enemyTank.getX() + 40
+                                    && this.getY() >= enemyTank.getY()
+                                    && this.getY() <= enemyTank.getY() + 60) {
                                 return true;
                             }
                         }
@@ -64,14 +71,162 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
                     }
                 }
                 break;
-            case 1:
+            case 1://this朝右
+                for (int i = 0; i < enemyTanks.size(); i++) {
+                    EnemyTank enemyTank = enemyTanks.get(i);//TODO 循环遍历为什么要放在switch判断语句里面
+                    //当前enemyTank也在集合中，不与自己比较是否碰撞
+                    if (enemyTank != this) {
+                        //集合中取出的坦克有上下 左右移动的两个形态，分为两种情况
+                        if (enemyTank.getDirect() == 0 || enemyTank.getDirect() == 2) {//上下移动
+                            //根据this坦克的左右两个坐标是否进入到vector集合中遍历得到的坦克的区域
+                            // （这个区域由他的坐标为原点确定）内判断两个坦克是否重合
+                            //1.取出的enemyTank上下移动时x坐标的变化范围为（enemyTank.getX()-enemyTank.getX()+40)
+                            //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+60）
+                            //2.this坦克的上方坐标为（getX()+60,getY()）,向下坐标为（getX()+60,getY()+40）
+                            //3.判断方法：this的左右两个坐标在enemyTank的x、y坐标范围内，说明两个坦克重合了
+                            if (this.getX() + 60 >= enemyTank.getX()
+                                    && this.getX() + 60 <= enemyTank.getX() + 40
+                                    && this.getY() >= enemyTank.getY()
+                                    && this.getY() <= enemyTank.getY() + 60) {//todo 写一起不行吗
+                                return true;
+                            }
+                            if (this.getX() + 60 >= enemyTank.getX()
+                                    && this.getX() + 60 <= enemyTank.getX() + 40
+                                    && this.getY() + 40 >= enemyTank.getY()
+                                    && this.getY() + 40 <= enemyTank.getY() + 60) {
+                                return true;
+                            }
+                        }
+                        if (enemyTank.getDirect() == 1 || enemyTank.getDirect() == 3) {//左右移动
+                            //1.取出的enemyTank上下移动时x坐标的变化范围为（enemyTank.getX()-enemyTank.getX()+60)
+                            //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+40）
+                            //2.this坦克的左上角坐标为（getX(),getY()）,右上角坐标为（getX()+40,getY()）
+
+                            //this坦克左上角与enemyTank x\y坐标范围
+                            if (this.getX() + 60 >= enemyTank.getX()
+                                    && this.getX() + 60 <= enemyTank.getX() + 60
+                                    && this.getY() >= enemyTank.getY()
+                                    && this.getY() <= enemyTank.getY() + 40) {
+                                return true;
+                            }
+                            //this坦克右上角与enemyTank x\y坐标范围
+                            if (this.getX() + 60 >= enemyTank.getX()
+                                    && this.getX() + 60 <= enemyTank.getX() + 60 &&
+                                    this.getY() + 40 >= enemyTank.getY() + 40 &&
+                                    this.getY() + 40 <= enemyTank.getY() + 40) {
+                                return true;
+                            }
+                        }
+
+
+                    }
+                }
                 break;
-            case 2:
+            case 2://this向下
+                for (int i = 0; i < enemyTanks.size(); i++) {
+                    EnemyTank enemyTank = enemyTanks.get(i);//TODO 循环遍历为什么要放在switch判断语句里面
+                    //当前enemyTank也在集合中，不与自己比较是否碰撞
+                    if (enemyTank != this) {
+                        //集合中取出的坦克有上下 左右移动的两个形态，分为两种情况
+                        if (enemyTank.getDirect() == 0 || enemyTank.getDirect() == 2) {//上下移动
+                            //根据this坦克的左右两个坐标是否进入到vector集合中遍历得到的坦克的区域
+                            // （这个区域由他的坐标为原点确定）内判断两个坦克是否重合
+                            //1.取出的enemyTank上下移动时x坐标的变化范围为（enemyTank.getX()-enemyTank.getX()+40)
+                            //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+60）
+                            //2.this坦克的左角坐标为（getX(),getY()+60）,右角坐标为（getX()+40,getY()+60）
+                            //3.判断方法：this的左右两个坐标在enemyTank的x、y坐标范围内，说明两个坦克重合了
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 40
+                                    && this.getY() + 60 >= enemyTank.getY()
+                                    && this.getY() + 60 <= enemyTank.getY() + 60) {//todo 写一起不行吗
+                                return true;
+                            }
+                            if (this.getX() + 40 >= enemyTank.getX()
+                                    && this.getX() + 40 <= enemyTank.getX() + 40
+                                    && this.getY() + 60 >= enemyTank.getY()
+                                    && this.getY() + 60 <= enemyTank.getY() + 60) {
+                                return true;
+                            }
+                        }
+                        if (enemyTank.getDirect() == 1 || enemyTank.getDirect() == 3) {//左右移动
+                            //1.取出的enemyTank上下移动时x坐标的变化范围为（enemyTank.getX()-enemyTank.getX()+60)
+                            //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+40）
+                            //2.this坦克的左上角坐标为（getX(),getY()）,右上角坐标为（getX()+40,getY()）
+
+                            //this坦克左上角与enemyTank x\y坐标范围
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 60
+                                    && this.getY() + 60 >= enemyTank.getY()
+                                    && this.getY() + 60 <= enemyTank.getY() + 40) {
+                                return true;
+                            }
+                            //this坦克右上角与enemyTank x\y坐标范围
+                            if (this.getX() + 40 >= enemyTank.getX()
+                                    && this.getX() + 40 <= enemyTank.getX() + 60 &&
+                                    this.getY() + 60 >= enemyTank.getY() + 40 &&
+                                    this.getY() + 60 <= enemyTank.getY() + 40) {
+                                return true;
+                            }
+                        }
+
+
+                    }
+                }
                 break;
-            case 3:
+            case 3://this向左
+                for (int i = 0; i < enemyTanks.size(); i++) {
+                    EnemyTank enemyTank = enemyTanks.get(i);//TODO 循环遍历为什么要放在switch判断语句里面
+                    //当前enemyTank也在集合中，不与自己比较是否碰撞
+                    if (enemyTank != this) {
+                        //集合中取出的坦克有上下 左右移动的两个形态，分为两种情况
+                        if (enemyTank.getDirect() == 0 || enemyTank.getDirect() == 2) {//上下移动
+                            //根据this坦克的左右两个坐标是否进入到vector集合中遍历得到的坦克的区域
+                            // （这个区域由他的坐标为原点确定）内判断两个坦克是否重合
+                            //1.取出的enemyTank上下移动时x坐标的变化范围为（enemyTank.getX()-enemyTank.getX()+40)
+                            //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+60）
+                            //2.this坦克的上角坐标为（getX(),getY()）,下角坐标为（getX(),getY()+40）
+                            //3.判断方法：this的左右两个坐标在enemyTank的x、y坐标范围内，说明两个坦克重合了
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 40
+                                    && this.getY() >= enemyTank.getY()
+                                    && this.getY() <= enemyTank.getY() + 60) {//todo 写一起不行吗
+                                return true;
+                            }
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 40
+                                    && this.getY() + 40 >= enemyTank.getY()
+                                    && this.getY() + 40 <= enemyTank.getY() + 60) {
+                                return true;
+                            }
+                        }
+                        if (enemyTank.getDirect() == 1 || enemyTank.getDirect() == 3) {//左右移动
+                            //1.取出的enemyTank上下移动时x坐标的变化范围为（enemyTank.getX()-enemyTank.getX()+60)
+                            //y坐标的变化范围为（enemyTank.getY()-enemyTank.getY()+40）
+                            //2.this坦克的左上角坐标为（getX(),getY()）,右上角坐标为（getX()+40,getY()）
+
+                            //this坦克左上角与enemyTank x\y坐标范围
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 60
+                                    && this.getY() >= enemyTank.getY()
+                                    && this.getY() <= enemyTank.getY() + 40) {
+                                return true;
+                            }
+                            //this坦克右上角与enemyTank x\y坐标范围
+                            if (this.getX() >= enemyTank.getX()
+                                    && this.getX() <= enemyTank.getX() + 60 &&
+                                    this.getY() + 40 >= enemyTank.getY() + 40 &&
+                                    this.getY() + 40 <= enemyTank.getY() + 40) {
+                                return true;
+                            }
+                        }
+
+
+                    }
+                }
                 break;
 
         }
+        return false;
     }
 
     //当Enemy对象被绘制时shot有坐标值
@@ -116,7 +271,7 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
                 case 0://朝上
                     for (int i = 0; i < (int) (Math.random() * 400); i++) {
                         //用if判断限制坦克的移动范围
-                        if (getY()>0) {
+                        if (getY()>0&&!isTouchEnemyTank()) {
                             moveUp();
                         }
                         try {
@@ -128,7 +283,7 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
                     break;
                 case 1:
                     for (int i = 0; i < (int) (Math.random() * 400); i++) {
-                        if (getX()+60<1000){
+                        if (getX()+60<1000&&!isTouchEnemyTank()){
                             moveRight();
                         }
                         try {
@@ -141,7 +296,7 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
 
                 case 2:
                     for (int i = 0; i < (int) (Math.random() * 400); i++) {
-                        if (getY()+60<750) {
+                        if (getY()+60<750&&!isTouchEnemyTank()) {
                             moveDown();
                         }
                         try {
@@ -153,7 +308,7 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
                     break;
                 case 3:
                     for (int i = 0; i < (int) (Math.random() * 400); i++) {
-                        if (getX()>0){
+                        if (getX()>0&&!isTouchEnemyTank()){
                             moveLeft();
                         }
                         try {
