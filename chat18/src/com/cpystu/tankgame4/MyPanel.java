@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.Vector;
 
 import static java.lang.Thread.sleep;
@@ -26,6 +27,8 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
     //Shot shot = null;
     //定义敌方坦克，由于敌方坦克数量多将他们放到集合里面，又因多线程这里使用Vector集合
     Vector<EnemyTank> enemyTanks = new Vector<>();
+    //定义一个Node集合，存放通过Recorder.getNodesAndEnemyTankRec（）传进来的vector,用于恢复敌人坦克的坐标和方向
+    Vector<Node> nodes = new Vector<>();
     int enemyTankSize = 3;//用变量控制敌方坦克数量
     //定义一个vector存放Bomb
     //TODO 当子弹击中坦克时把图片放进Vector里面？？ 是
@@ -36,32 +39,66 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
     Image image2=null;
     Image image3=null;
 
-    public MyPanel() {
-        //初始化一个 子弹 在面板上//不需要，因为子弹作为坦克的属性可以通过坦克对象获取
-        //再创建并初始化一个子弹会造成有多个子弹对象，调用出错
+    public MyPanel(String key) {
+        File file = new File(Recorder.getRecordeFile());
+        if (file.exists()) {
+            nodes = Recorder.getNodesAndEnemyTanksRec(); //需要判断 然后修改 如果是新游戏 就不要读取 刚刚为什么不行  是因为发现 整个流程都要改
+        } else {
+            System.out.println("请先进行游戏！");
+            key = "2";
+        }
+        Recorder.setEnemyTanks(enemyTanks);//这里用的是静态方法 //todo 为什么不能new一个Recorder对象再调用他的setEnemyTanks()
         hero = new Hero(500, 100);//初始化  我方坦克
         //shot = new Shot(hero.getX(), hero.getY(), hero.getDirect());  //或者在这里new 然后设置 hero.set shot //toDO 要么在这里 要么zaihero 类
         //创建坦克的时候设置它的速度
         //hero.setSpeed(3);默认为1
-        //使用for循环初始化 敌人的坦克
-        for (int i = 0; i < enemyTankSize; i++) {
-            EnemyTank enemyTank = new EnemyTank((100 * (i + 1)), 0);//得到坦克
-            //todo 使enemyTank持有enemyTanks集合，即能够得到enemyTanks的对象 不是很理解
-            enemyTank.setEnemyTanks(enemyTanks);
-            enemyTank.setDirect(2);//
-            new Thread(enemyTank).start();//创建敌人坦克时启动线程
-            //给该enemyTank对象加入一颗子弹（后期可以加多颗），即在这里创建一颗子弹并设置子弹坐标
-            Shot shot = new Shot(enemyTank.getX() + 20, enemyTank.getY() + 60, enemyTank.getDirect());//此时得到了一个有坐标的shot对象
-            //把得到的shot对象放到enemyThank的Vector中
-            enemyTank.shots.add(shot);//??TODO ??意思是把shot对象放到shots集合再放到enemyTank里吗
-            //启动线程(否则子弹坐标不会变)
-            new Thread(shot).start();
-            enemyTanks.add(enemyTank);//把这个坦克放到集合里面
+        switch (key) {
+            case "1":
+                for (int i = 0; i < nodes.size(); i++) {
+                    Node node = nodes.get(i);
+                    EnemyTank enemyTank = new EnemyTank(node.getX(), node.getY());//得到坦克
+                    //todo 使enemyTank持有enemyTanks集合，即能够得到enemyTanks的对象 不是很理解
+                    enemyTank.setEnemyTanks(enemyTanks);//对象名enemyTank指的是enemyTank类的对象，调用该类的setEnemyTanks（），就将MyPanel的集合传了过去
+                    enemyTank.setDirect(node.getDirect());//
+                    new Thread(enemyTank).start();//创建敌人坦克时启动线程
+                    //给该enemyTank对象加入一颗子弹（后期可以加多颗），即在这里创建一颗子弹并设置子弹坐标
+                    Shot shot = new Shot(enemyTank.getX() + 20, enemyTank.getY() + 60, enemyTank.getDirect());//此时得到了一个有坐标的shot对象
+                    //把得到的shot对象放到enemyThank的Vector中
+                    enemyTank.shots.add(shot);//??TODO ??意思是把shot对象放到shots集合再放到enemyTank里吗
+                    //启动线程(否则子弹坐标不会变)
+                    new Thread(shot).start();
+                    enemyTanks.add(enemyTank);//把这个坦克放到集合里面
+                }
+                break;
+            case "2": //看代码 选择 2的时候 也没有加载呀
+                for (int i = 0; i < enemyTankSize; i++) {
+                    EnemyTank enemyTank = new EnemyTank((100 * (i + 1)), 0);//得到坦克
+                    //todo 使enemyTank持有enemyTanks集合，即能够得到enemyTanks的对象 不是很理解
+                    enemyTank.setEnemyTanks(enemyTanks);//对象名enemyTank指的是enemyTank类的对象，调用该类的setEnemyTanks（），就将MyPanel的集合传了过去
+                    enemyTank.setDirect(2);//
+                    new Thread(enemyTank).start();//创建敌人坦克时启动线程
+                    //给该enemyTank对象加入一颗子弹（后期可以加多颗），即在这里创建一颗子弹并设置子弹坐标
+                    Shot shot = new Shot(enemyTank.getX() + 20, enemyTank.getY() + 60, enemyTank.getDirect());//此时得到了一个有坐标的shot对象
+                    //把得到的shot对象放到enemyThank的Vector中
+                    enemyTank.shots.add(shot);//??TODO ??意思是把shot对象放到shots集合再放到enemyTank里吗
+                    //启动线程(否则子弹坐标不会变)
+                    new Thread(shot).start();
+                    enemyTanks.add(enemyTank);//把这个坦克放到集合里面
+                }
+                break;
+            default:
+                System.out.println("输入有误！");
+                break;
         }
+        //使用for循环初始化 敌人的坦克
         //初始化image对象
         image1 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb1.jpg");
         image2 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb2.jpg");
         image3 = Toolkit.getDefaultToolkit().getImage("D:\\project\\curriculum-design-master\\chat18\\out\\production\\untitled\\bomb3.jpg");
+//        Recorder recorder = new Recorder();//在MyPanel类里面创建Recorder类的对象，对象名为recorder
+//        recorder.setEnemyTanks(enemyTanks);//通过对象名调用recorder的set方法，将MyPanel的enemyTanks传给Recorder
+        //初始化一个 子弹 在面板上//不需要，因为子弹作为坦克的属性可以通过坦克对象获取
+        //再创建并初始化一个子弹会造成有多个子弹对象，调用出错
     }
     //编写一个方法，使得界面上显示出当前击毁敌人坦克数的信息
     public void showInfo(Graphics g){//需要在面板上画出来，传入参数Graphics g

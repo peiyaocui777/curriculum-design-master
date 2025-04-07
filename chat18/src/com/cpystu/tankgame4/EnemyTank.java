@@ -9,7 +9,7 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
     Vector<Shot> shots = new Vector<>();//创建了shots集合，此时集合中还没有数据，即shots只是有了名字，还没被创建
     //增加一个属性，使得enemyTank可以得到EnemyTanks集合的对象
     @Setter
-    Vector<EnemyTank> enemyTanks = new Vector<>();
+    Vector<EnemyTank> enemyTanks ;
     //通过setEnemyTank的方法将Vector集合传过来 TODO  ？？
 
     /*public void setEnemyTanks(Vector<EnemyTank> enemyTanks) {
@@ -23,6 +23,7 @@ public class EnemyTank extends Tank implements Runnable {//敌人坦克.要使�
             case 0://当前坦克方向向上
                 for (int i = 0; i < enemyTanks.size(); i++) {
                     EnemyTank enemyTank = enemyTanks.get(i);//TODO 循环遍历为什么要放在switch判断语句里面
+                    enemyTank.setEnemyTanks(enemyTanks);
                     //当前enemyTank也在集合中，不与自己比较是否碰撞
                     if (enemyTank != this) {
                         //集合中取出的坦克有上下 左右移动的两个形态，分为两种情况

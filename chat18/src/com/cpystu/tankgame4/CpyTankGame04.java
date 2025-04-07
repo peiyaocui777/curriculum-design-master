@@ -1,21 +1,22 @@
 package src.com.cpystu.tankgame4;
 
 
-import lombok.Synchronized;
-
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Scanner;
 
 public class CpyTankGame04 extends JFrame {
     MyPanel mp = null;//这条语句要放在CpyTankGame01类里面构造器才可以直接使用
-
+    Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
         new CpyTankGame04();
     }
 //@Synchronized
     public CpyTankGame04() {
-        mp = new MyPanel();
+        System.out.println("请输入你的选择：1 “继续上局游戏” 2 开始新游戏");
+        String key = scanner.next();
+        mp = new MyPanel(key);
         //启动MyPanel线程
         Thread thread = new Thread(mp);
         //Thread thread1 = new Thread(mp);
@@ -27,12 +28,13 @@ public class CpyTankGame04 extends JFrame {
         this.addKeyListener(mp);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-
         //在JFrame中增加响应关闭窗口的处理
+        Recorder recorder = new Recorder();//！
+        /* recorder.setEnemyTanks(mp.enemyTanks);*/
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Recorder.keepRecord();
+                recorder.keepRecord();
                 System.exit(0);
             }
         });
