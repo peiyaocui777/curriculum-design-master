@@ -1,6 +1,9 @@
+
 # 📚 Java 基础核心知识导航
 
 > 最后更新：2025-04-08 | 版本：v2.1.3
+
+🔗 项目笔记同步访问 👉 [📒 默认知识库@语雀](https://www.yuque.com/g/fengjianqianmeng/il5m2w/collaborator/join?token=qqErM0LqlqpQsMD7&source=book_collaborator)
 
 <details>
 <summary>🔍 展开完整目录（点击可展开，Ctrl+F 搜索关键词）</summary>
@@ -51,7 +54,32 @@
   - [5.5 集合的遍历](#55-集合的遍历)
   - [5.6 集合与泛型](#56-集合与泛型)
   - [5.7 集合工具类](#57-集合工具类)
+
+- [6. 反射（Reflection）](#6-反射reflection)
+  - [6.1 什么是反射？](#61-什么是反射)
+  - [6.2 反射的核心类](#62-反射的核心类)
+  - [6.3 获取Class对象](#63-获取class对象)
+  - [6.4 反射创建对象](#64-反射创建对象)
+  - [6.5 反射访问字段](#65-反射访问字段)
+  - [6.6 反射调用方法](#66-反射调用方法)
+  - [6.7 反射获取类信息](#67-反射获取类信息)
+  - [6.8 反射的应用场景](#68-反射的应用场景)
+  - [6.9 反射的优缺点](#69-反射的优缺点)
+
+- [7. 数据库操作（JDBC）](#7-数据库操作jdbc)
+  - [7.1 什么是JDBC？](#71-什么是jdbc)
+  - [7.2 JDBC的核心组件](#72-jdbc的核心组件)
+  - [7.3 建立数据库连接](#73-建立数据库连接)
+  - [7.4 执行SQL语句](#74-执行sql语句)
+  - [7.5 处理ResultSet](#75-处理resultset)
+  - [7.6 事务管理](#76-事务管理)
+  - [7.7 批处理操作](#77-批处理操作)
+  - [7.8 数据库连接池](#78-数据库连接池)
+  - [7.9 DAO设计模式](#79-dao设计模式)
+  - [7.10 最佳实践](#710-最佳实践)
 </details>
+
+---
 
 ---
 
@@ -811,6 +839,676 @@ public class Main {
 
 ---
 
+# 📚 Java 基础核心知识导航
+
+我可以为您补充反射和数据库这两个章节的内容，完善您的Java基础核心知识导航文档。以下是这两个章节的完整内容，格式与风格与之前的章节保持一致。
+
+---
+
+## 6. 反射（Reflection）<a id="6-反射reflection"></a>
+
+### 6.1 什么是反射？<a id="61-什么是反射"></a>
+反射是Java的一种强大机制，允许程序在运行时检查和操作类、接口、方法和字段，即使在编译时不知道它们的具体信息。
+
+- **通俗比喻**：反射就像是给程序装了一面"镜子"，能够让程序自己照镜子，看清自己的结构和能力。
+- **实际用途**：框架开发、插件机制、动态代理等高级应用场景。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.2 反射的核心类<a id="62-反射的核心类"></a>
+Java反射API主要包含以下核心类：
+
+- **`Class`**：代表类的实体，包含类的所有信息。
+- **`Field`**：代表类的成员变量（字段）。
+- **`Method`**：代表类的方法。
+- **`Constructor`**：代表类的构造方法。
+- **`Modifier`**：提供访问修饰符信息。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.3 获取Class对象<a id="63-获取class对象"></a>
+获取Class对象有三种主要方式：
+
+```java
+// 方式1：通过对象的getClass()方法
+String str = "Hello";
+Class<?> cls1 = str.getClass();
+
+// 方式2：通过类的class属性
+Class<?> cls2 = String.class;
+
+// 方式3：通过Class.forName()方法（最常用）
+try {
+    Class<?> cls3 = Class.forName("java.lang.String");
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.4 反射创建对象<a id="64-反射创建对象"></a>
+通过反射可以动态创建类的实例：
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // 获取Class对象
+            Class<?> cls = Class.forName("java.util.ArrayList");
+            
+            // 创建实例（调用无参构造器）
+            Object list = cls.newInstance();  // 已过时，推荐使用下面的方式
+            
+            // 推荐的创建实例方式
+            Object list2 = cls.getDeclaredConstructor().newInstance();
+            
+            System.out.println("创建的对象: " + list2);
+            System.out.println("对象类型: " + list2.getClass().getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.5 反射访问字段<a id="65-反射访问字段"></a>
+通过反射可以获取和修改类的字段，包括私有字段：
+
+```java
+class Person {
+    public String name = "Default";
+    private int age = 0;
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Person p = new Person();
+            Class<?> cls = p.getClass();
+            
+            // 获取公共字段
+            Field nameField = cls.getField("name");
+            System.out.println("原始name值: " + nameField.get(p));
+            
+            // 修改字段值
+            nameField.set(p, "张三");
+            System.out.println("修改后name值: " + p.name);  // 输出: 张三
+            
+            // 获取私有字段
+            Field ageField = cls.getDeclaredField("age");
+            // 设置可访问
+            ageField.setAccessible(true);
+            System.out.println("原始age值: " + ageField.get(p));
+            
+            // 修改私有字段
+            ageField.set(p, 25);
+            System.out.println("修改后age值: " + ageField.get(p));  // 输出: 25
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.6 反射调用方法<a id="66-反射调用方法"></a>
+通过反射可以调用类的方法，包括私有方法：
+
+```java
+class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+    
+    private String secret(String message) {
+        return "Secret: " + message;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Calculator calc = new Calculator();
+            Class<?> cls = calc.getClass();
+            
+            // 调用公共方法
+            Method addMethod = cls.getMethod("add", int.class, int.class);
+            Object result = addMethod.invoke(calc, 10, 20);
+            System.out.println("10 + 20 = " + result);  // 输出: 10 + 20 = 30
+            
+            // 调用私有方法
+            Method secretMethod = cls.getDeclaredMethod("secret", String.class);
+            secretMethod.setAccessible(true);
+            Object secretResult = secretMethod.invoke(calc, "Hello");
+            System.out.println(secretResult);  // 输出: Secret: Hello
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.7 反射获取类信息<a id="67-反射获取类信息"></a>
+反射可以用来分析类的结构：
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Class<?> cls = Class.forName("java.util.ArrayList");
+            
+            // 获取类名
+            System.out.println("类名: " + cls.getName());
+            System.out.println("简单类名: " + cls.getSimpleName());
+            
+            // 获取修饰符
+            int modifiers = cls.getModifiers();
+            System.out.println("是否是公共类: " + Modifier.isPublic(modifiers));
+            
+            // 获取父类
+            Class<?> superClass = cls.getSuperclass();
+            System.out.println("父类: " + superClass.getName());
+            
+            // 获取实现的接口
+            Class<?>[] interfaces = cls.getInterfaces();
+            System.out.println("实现的接口:");
+            for (Class<?> i : interfaces) {
+                System.out.println("  " + i.getName());
+            }
+            
+            // 获取所有公共方法
+            Method[] methods = cls.getMethods();
+            System.out.println("公共方法数量: " + methods.length);
+            
+            // 获取所有字段
+            Field[] fields = cls.getDeclaredFields();
+            System.out.println("字段数量: " + fields.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.8 反射的应用场景<a id="68-反射的应用场景"></a>
+- **框架开发**：Spring、Hibernate等框架大量使用反射。
+- **注解处理**：运行时处理注解信息。
+- **动态代理**：创建接口的实现类。
+- **插件机制**：动态加载和使用插件。
+- **测试工具**：访问私有方法和字段进行测试。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 6.9 反射的优缺点<a id="69-反射的优缺点"></a>
+**优点：**
+- 灵活性高，可以在运行时动态操作类和对象。
+- 可以访问私有成员，突破访问限制。
+- 是很多框架的基础技术。
+
+**缺点：**
+- 性能开销大，比直接调用慢。
+- 破坏了封装性，可能导致安全问题。
+- 代码可读性降低，难以维护。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+---
+
+## 7. 数据库操作（JDBC）<a id="7-数据库操作jdbc"></a>
+
+### 7.1 什么是JDBC？<a id="71-什么是jdbc"></a>
+JDBC（Java Database Connectivity）是Java标准的数据库访问API，允许Java程序连接和操作各种关系型数据库。
+
+- **通俗比喻**：JDBC就像是Java与数据库之间的"翻译官"，负责将Java的命令翻译成数据库能理解的语言，再把数据库的回应翻译给Java。
+- **实际用途**：连接数据库、执行SQL语句、处理查询结果。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.2 JDBC的核心组件<a id="72-jdbc的核心组件"></a>
+JDBC API主要包含以下核心组件：
+
+- **`DriverManager`**：管理数据库驱动程序。
+- **`Connection`**：代表与数据库的连接。
+- **`Statement`/`PreparedStatement`/`CallableStatement`**：执行SQL语句。
+- **`ResultSet`**：存储查询结果。
+- **`SQLException`**：处理数据库操作异常。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.3 建立数据库连接<a id="73-建立数据库连接"></a>
+连接数据库是使用JDBC的第一步：
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Main {
+    public static void main(String[] args) {
+        // 数据库连接参数
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        String username = "root";
+        String password = "password";
+        
+        // 建立连接
+        try {
+            // 注册驱动（Java 6之后可以省略）
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            // 获取连接
+            Connection conn = DriverManager.getConnection(url, username, password);
+            System.out.println("数据库连接成功!");
+            
+            // 使用完毕后关闭连接
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("找不到数据库驱动: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("数据库连接失败: " + e.getMessage());
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.4 执行SQL语句<a id="74-执行sql语句"></a>
+JDBC提供了三种执行SQL语句的方式：
+
+**1. Statement（基本语句）**
+```java
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 省略连接代码...
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            Statement stmt = conn.createStatement();
+            
+            // 执行更新（INSERT, UPDATE, DELETE）
+            String sql = "INSERT INTO users (name, email) VALUES ('张三', 'zhangsan@example.com')";
+            int rowsAffected = stmt.executeUpdate(sql);
+            System.out.println("插入了 " + rowsAffected + " 条记录");
+            
+            // 执行查询（SELECT）
+            String query = "SELECT * FROM users";
+            ResultSet rs = stmt.executeQuery(query);
+            
+            // 处理结果集
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                System.out.println(id + ": " + name + " (" + email + ")");
+            }
+            
+            // 关闭资源
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**2. PreparedStatement（预编译语句，推荐使用）**
+```java
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 省略连接代码...
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            // 预编译SQL，使用?作为参数占位符
+            String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            // 设置参数
+            pstmt.setString(1, "李四");  // 第一个?
+            pstmt.setString(2, "lisi@example.com");  // 第二个?
+            
+            // 执行更新
+            int rowsAffected = pstmt.executeUpdate();
+            System.out.println("插入了 " + rowsAffected + " 条记录");
+            
+            // 查询示例
+            String query = "SELECT * FROM users WHERE name = ?";
+            PreparedStatement queryStmt = conn.prepareStatement(query);
+            queryStmt.setString(1, "李四");
+            
+            ResultSet rs = queryStmt.executeQuery();
+            while (rs.next()) {
+                System.out.println("找到: " + rs.getString("name"));
+            }
+            
+            // 关闭资源
+            rs.close();
+            queryStmt.close();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.5 处理ResultSet<a id="75-处理resultset"></a>
+`ResultSet`对象包含查询返回的数据，提供了多种方法获取不同类型的数据：
+
+```java
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 省略连接和查询代码...
+        try (Connection conn = DriverManager.getConnection(url, username, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM products")) {
+            
+            // 遍历结果集
+            while (rs.next()) {
+                // 通过列名获取
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                double price = rs.getDouble("price");
+                Date createTime = rs.getDate("create_time");
+                boolean isAvailable = rs.getBoolean("is_available");
+                
+                // 通过列索引获取（从1开始）
+                // int id = rs.getInt(1);
+                // String name = rs.getString(2);
+                
+                System.out.println(id + ": " + name + ", 价格: " + price + 
+                                  ", 创建时间: " + createTime + 
+                                  ", 是否可用: " + isAvailable);
+                
+                // 检查是否为NULL
+                if (rs.getObject("description") == null) {
+                    System.out.println("  描述为空");
+                } else {
+                    System.out.println("  描述: " + rs.getString("description"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.6 事务管理<a id="76-事务管理"></a>
+事务确保一组数据库操作要么全部成功，要么全部失败：
+
+```java
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 省略连接代码...
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url, username, password);
+            
+            // 关闭自动提交
+            conn.setAutoCommit(false);
+            
+            // 执行多个操作作为一个事务
+            Statement stmt = conn.createStatement();
+            
+            // 操作1: 从账户A减去100
+            stmt.executeUpdate("UPDATE accounts SET balance = balance - 100 WHERE id = 1");
+            
+            // 操作2: 向账户B增加100
+            stmt.executeUpdate("UPDATE accounts SET balance = balance + 100 WHERE id = 2");
+            
+            // 如果一切正常，提交事务
+            conn.commit();
+            System.out.println("转账成功!");
+            
+            // 恢复自动提交
+            conn.setAutoCommit(true);
+            stmt.close();
+        } catch (SQLException e) {
+            // 发生错误，回滚事务
+            System.out.println("转账失败，回滚事务: " + e.getMessage());
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            // 关闭连接
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.7 批处理操作<a id="77-批处理操作"></a>
+批处理允许一次性执行多条SQL语句，提高性能：
+
+```java
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 省略连接代码...
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            conn.setAutoCommit(false);  // 关闭自动提交
+            
+            // 创建PreparedStatement
+            String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            // 添加批处理记录
+            for (int i = 1; i <= 1000; i++) {
+                pstmt.setString(1, "用户" + i);
+                pstmt.setString(2, "user" + i + "@example.com");
+                pstmt.addBatch();  // 添加到批处理
+                
+                // 每500条执行一次
+                if (i % 500 == 0) {
+                    pstmt.executeBatch();  // 执行批处理
+                    pstmt.clearBatch();    // 清空批处理
+                }
+            }
+            
+            // 执行剩余的批处理
+            pstmt.executeBatch();
+            
+            // 提交事务
+            conn.commit();
+            System.out.println("批处理完成!");
+            
+            // 恢复自动提交
+            conn.setAutoCommit(true);
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.8 数据库连接池<a id="78-数据库连接池"></a>
+创建数据库连接很耗时，连接池可以重用连接提高性能：
+
+```java
+// 使用HikariCP连接池（需要添加依赖）
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 配置连接池
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/mydb");
+        config.setUsername("root");
+        config.setPassword("password");
+        config.setMaximumPoolSize(10);  // 最大连接数
+        
+        // 创建数据源
+        try (HikariDataSource dataSource = new HikariDataSource(config)) {
+            // 从连接池获取连接
+            try (Connection conn = dataSource.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users")) {
+                
+                if (rs.next()) {
+                    System.out.println("用户总数: " + rs.getInt(1));
+                }
+            }
+            
+            System.out.println("连接池状态:");
+            System.out.println("  总连接数: " + dataSource.getHikariPoolMXBean().getTotalConnections());
+            System.out.println("  活跃连接数: " + dataSource.getHikariPoolMXBean().getActiveConnections());
+            System.out.println("  空闲连接数: " + dataSource.getHikariPoolMXBean().getIdleConnections());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.9 DAO设计模式<a id="79-dao设计模式"></a>
+DAO（Data Access Object）模式将数据访问逻辑与业务逻辑分离：
+
+```java
+// 实体类
+class User {
+    private int id;
+    private String name;
+    private String email;
+    
+    // 构造器、getter和setter省略...
+    
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", name='" + name + "', email='" + email + "'}";
+    }
+}
+
+// DAO接口
+interface UserDAO {
+    void insert(User user) throws SQLException;
+    User findById(int id) throws SQLException;
+    List<User> findAll() throws SQLException;
+    void update(User user) throws SQLException;
+    void delete(int id) throws SQLException;
+}
+
+// DAO实现类
+class UserDAOImpl implements UserDAO {
+    private Connection conn;
+    
+    public UserDAOImpl(Connection conn) {
+        this.conn = conn;
+    }
+    
+    @Override
+    public void insert(User user) throws SQLException {
+        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, user.getName());
+            pstmt.setString(2, user.getEmail());
+            pstmt.executeUpdate();
+            
+            // 获取生成的ID
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    user.setId(rs.getInt(1));
+                }
+            }
+        }
+    }
+    
+    @Override
+    public User findById(int id) throws SQLException {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setName(rs.getString("name"));
+                    user.setEmail(rs.getString("email"));
+                    return user;
+                }
+                return null;
+            }
+        }
+    }
+    
+    // 其他方法实现省略...
+}
+
+// 使用DAO
+public class Main {
+    public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            UserDAO userDAO = new UserDAOImpl(conn);
+            
+            // 创建用户
+            User newUser = new User();
+            newUser.setName("王五");
+            newUser.setEmail("wangwu@example.com");
+            userDAO.insert(newUser);
+            System.out.println("创建用户: " + newUser);
+            
+            // 查询用户
+            User user = userDAO.findById(newUser.getId());
+            System.out.println("查询结果: " + user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+### 7.10 最佳实践<a id="710-最佳实践"></a>
+- **使用PreparedStatement**：防止SQL注入，提高性能。
+- **正确关闭资源**：使用try-with-resources自动关闭资源。
+- **使用连接池**：重用数据库连接，提高性能。
+- **事务管理**：确保数据一致性。
+- **参数化配置**：将数据库连接信息放在配置文件中。
+- **异常处理**：妥善处理SQLException。
+- **分页查询**：处理大量数据时使用LIMIT进行分页。
+
+[🔙 返回目录](#📂-目录) | [🔝 返回顶部](#-java-基础核心知识导航)
+
+---
+
 ## 🌟 文档使用技巧
 
 ### 导航指南
@@ -823,9 +1521,11 @@ public class Main {
 ```markdown
 - [x] 已学习：枚举
 - [x] 已学习：异常
-- [ ] 待学习：泛型
-- [ ] 待学习：常用类
-- [ ] 待学习：集合
+- [x] 已学习：泛型
+- [x] 已学习：常用类
+- [x] 已学习：集合
+- [ ] 待学习：反射
+- [ ] 待学习：数据库操作
 ```
 
 ### 搜索提示
@@ -836,8 +1536,8 @@ public class Main {
 可以在各章节下方添加自己的笔记和理解，例如：
 ```markdown
 ### 我的笔记
-- 枚举最适合用于表示固定状态的场景
-- 记住泛型的通配符用法：? extends T 和 ? super T
+- 反射虽然强大但会降低性能，只在必要时使用
+- 使用PreparedStatement而不是Statement可以防止SQL注入
 ```
 
 [🔝 返回顶部](#-java-基础核心知识导航)
