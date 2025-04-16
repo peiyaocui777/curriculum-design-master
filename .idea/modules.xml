@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/charpter17/charpter17.iml" filepath="$PROJECT_DIR$/charpter17/charpter17.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chat18/chat18.iml" filepath="$PROJECT_DIR$/chat18/chat18.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/curriculum-design-master.iml" filepath="$PROJECT_DIR$/.idea/curriculum-design-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mhl/mhl.iml" filepath="$PROJECT_DIR$/mhl/mhl.iml" />
       <module fileurl="file://$PROJECT_DIR$/tests/tests.iml" filepath="$PROJECT_DIR$/tests/tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/untitled/untitled.iml" filepath="$PROJECT_DIR$/untitled/untitled.iml" />
     </modules>
