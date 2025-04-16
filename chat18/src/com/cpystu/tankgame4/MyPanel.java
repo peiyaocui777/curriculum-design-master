@@ -47,6 +47,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {//实现Ru
             System.out.println("请先进行游戏！");
             key = "2";
         }
+        if (key.equals("2")){ //TODO 新游戏时候 敌人坦克数量为0 直接设置为0 最简单的写法了
+            Recorder.setAllEnemyTankNum(0);
+        }
         Recorder.setEnemyTanks(enemyTanks);//这里用的是静态方法 //todo 为什么不能new一个Recorder对象再调用他的setEnemyTanks()
         hero = new Hero(500, 100);//初始化  我方坦克
         //shot = new Shot(hero.getX(), hero.getY(), hero.getDirect());  //或者在这里new 然后设置 hero.set shot //toDO 要么在这里 要么zaihero 类
