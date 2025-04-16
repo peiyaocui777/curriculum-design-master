@@ -1,8 +1,12 @@
 package com.cpystu.mhl.view;
 
+import com.cpystu.mhl.domain.DiningTable;
 import com.cpystu.mhl.domain.Employee;
+import com.cpystu.mhl.service.DiningTableService;
 import com.cpystu.mhl.service.EmployeeService;
 import com.cpystu.mhl.utils.Utility;
+
+import java.util.List;
 
 /**
  * @author 崔佩谣
@@ -10,6 +14,7 @@ import com.cpystu.mhl.utils.Utility;
  * @description: View层调用service
  */
 public class MHLView {
+    //TableStateView tableStateView=new TableStateView();
     private boolean Loop=true;
     //在View层调用Service对象，要先获得Service
     private EmployeeService employeeService=new EmployeeService();
@@ -50,7 +55,8 @@ public class MHLView {
                             int choice=Utility.readInt();
                             switch (choice){
                                 case 1:
-                                    System.out.println("显示餐桌状态");//将来在这这里调用对应的方法
+                                    //定义一个TableStateView对象,调用他的方法
+                                    new TableStateView().getListDiningTable();
                                     break;
                                 case 2:
 
