@@ -1,6 +1,6 @@
 package com.cpystu.mhl.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author 崔佩谣
@@ -21,13 +21,13 @@ public class Bill {
     private Integer menuId;
     private Double money;
     private Integer diningTableId;
-    private Date billdate;
+    private LocalDate billdate;
     private String state;
 
     public Bill() {
     }
 
-    public Bill(Integer id, String billId, Integer menuId, Double money, Integer diningTableId, Date billdate, String state) {
+    public Bill(Integer id, String billId, Integer menuId, Double money, Integer diningTableId, LocalDate billdate, String state) {
         this.id = id;
         this.billId = billId;
         this.menuId = menuId;
@@ -77,11 +77,11 @@ public class Bill {
         this.diningTableId = diningTableId;
     }
 
-    public Date getBilldate() {
+    public LocalDate getBilldate() {
         return billdate;
     }
 
-    public void setBilldate(Date billdate) {
+    public void setBilldate(LocalDate billdate) {
         this.billdate = billdate;
     }
 
@@ -91,5 +91,15 @@ public class Bill {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return id +
+                "\t\t"+ menuId +
+                "\t\t"+ money +
+                "\t\t" + diningTableId +
+                "\t\t" + billdate +
+                "\t\t" + state;
     }
 }

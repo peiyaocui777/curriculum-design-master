@@ -18,6 +18,7 @@ public class MHLView {
     private boolean Loop=true;
     //在View层调用Service对象，要先获得Service
     private EmployeeService employeeService=new EmployeeService();
+    private BillView billView=new BillView();
     public static void main(String[] args) {
         new MHLView().mainMenu();
     }
@@ -65,10 +66,10 @@ public class MHLView {
                                     new MenuView().showMenu();
                                     break;
                                 case 4:
-                                    new BillView().orderView();
+                                    billView.orderView();
                                     break;
                                 case 5:
-
+                                    billView.showBill();
                                     break;
                                 case 6:
 

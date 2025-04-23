@@ -1,8 +1,10 @@
 package com.cpystu.mhl.service;
 
 import com.cpystu.mhl.dao.BillDAO;
+import com.cpystu.mhl.domain.Bill;
 
 import java.beans.beancontext.BeanContext;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -34,5 +36,13 @@ public class BillService {
         }
         //更新餐桌状态(通过调用DindingTableService的updateDiningTableState（）方法实现)
         return diningTableService.updateDiningTableState(diningTableId,"就餐中");
+    }
+    //编写方法，返回一个账单集合
+    public List<Bill> listBill(){
+        return billDAO.queryMulti("select * from bill", Bill.class);
+    }
+    //返回一条bill记录
+    public Bill getBill(){
+        return billDAO.querySingle("select * from bill", Bill.class);
     }
 }
