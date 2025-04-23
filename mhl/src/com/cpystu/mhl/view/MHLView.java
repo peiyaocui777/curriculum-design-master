@@ -59,13 +59,13 @@ public class MHLView {
                                     new TableStateView().getListDiningTable();
                                     break;
                                 case 2:
-
+                                    new OrderTableView().orderTable();
                                     break;
                                 case 3:
-
+                                    new MenuView().showMenu();
                                     break;
                                 case 4:
-
+                                    new BillView().orderView();
                                     break;
                                 case 5:
 

@@ -1,6 +1,7 @@
 package com.cpystu.mhl.dao;
 
 
+import com.cpystu.mhl.domain.DiningTable;
 import com.cpystu.mhl.utils.JDBCUtilsByDruid;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -21,7 +22,7 @@ public class BasicDAO<T> { //泛型指定具体类型
     private QueryRunner qr =  new QueryRunner();
 
     //开发通用的dml方法, 针对任意的表
-    public int update(String sql, Object... parameters) {
+    public int update(String sql, Object... parameters) { //继续
 
         Connection connection = null;
 
@@ -62,12 +63,15 @@ public class BasicDAO<T> { //泛型指定具体类型
     }
 
     //查询单行结果 的通用方法
-    public T querySingle(String sql, Class<T> clazz, Object... parameters) {
+    public T querySingle(String sql, Class<T> clazz, Object... parameters) {//是因为下面的return返回了是泛型 不确定类型 T
 
         Connection connection = null;
         try {
             connection = JDBCUtilsByDruid.getConnection();
-            return  qr.query(connection, sql, new BeanHandler<T>(clazz), parameters);
+            T query = qr.query(connection, sql, new BeanHandler<T>(clazz), parameters);
+            //其实问题就在这个理 new BeanHandler<T>(clazz) 按道理说 他已经指定了类型  只要调用返回的类型就应该是对应的
+            //你把代码提交我看看 是为啥来着 不然强制转换 感觉不太规范
+            return query;
 
         } catch (SQLException e) {
             throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
