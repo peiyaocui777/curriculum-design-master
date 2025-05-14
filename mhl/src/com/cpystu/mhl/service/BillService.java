@@ -39,7 +39,7 @@ public class BillService {
     }
     //编写方法，返回一个账单集合
     public List<Bill> listBill(){
-        return billDAO.queryMulti("select * from bill", Bill.class);
+        return billDAO.queryMulti("select * from bill", Bill.class);//少了参数
     }
     //返回一条bill记录
     public Bill getBill(){

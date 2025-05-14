@@ -1,6 +1,9 @@
 package com.cpystu.mhl.domain;
 
+import com.cpystu.mhl.service.BillService;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author 崔佩谣
@@ -19,18 +22,20 @@ public class Bill {
     private Integer id;
     private String billId;
     private Integer menuId;
+    private Integer nums;
     private Double money;
     private Integer diningTableId;
-    private LocalDate billdate;
+    private LocalDateTime billdate;
     private String state;
 
     public Bill() {
     }
 
-    public Bill(Integer id, String billId, Integer menuId, Double money, Integer diningTableId, LocalDate billdate, String state) {
+    public Bill(Integer id, String billId, Integer menuId, Integer nums,Double money, Integer diningTableId, LocalDateTime billdate, String state) {
         this.id = id;
         this.billId = billId;
         this.menuId = menuId;
+        this.nums=nums;
         this.money = money;
         this.diningTableId = diningTableId;
         this.billdate = billdate;
@@ -61,6 +66,14 @@ public class Bill {
         this.menuId = menuId;
     }
 
+    public Integer getNums() {
+        return nums;
+    }
+
+    public void setNums(Integer nums) {
+        this.nums = nums;
+    }
+
     public Double getMoney() {
         return money;
     }
@@ -77,11 +90,11 @@ public class Bill {
         this.diningTableId = diningTableId;
     }
 
-    public LocalDate getBilldate() {
+    public LocalDateTime getBilldate() {
         return billdate;
     }
 
-    public void setBilldate(LocalDate billdate) {
+    public void setBilldate(LocalDateTime billdate) {
         this.billdate = billdate;
     }
 
@@ -97,6 +110,7 @@ public class Bill {
     public String toString() {
         return id +
                 "\t\t"+ menuId +
+                "\t\t"+ nums+
                 "\t\t"+ money +
                 "\t\t" + diningTableId +
                 "\t\t" + billdate +

@@ -13,5 +13,17 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="big_event@localhost" uuid="ad1264c2-8a4e-4b85-877d-ddc0d58d4519">
+      <driver-ref>mysql_aurora_aws</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>software.aws.rds.jdbc.mysql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql:aws://localhost:3306/big_event</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="com.intellij.clouds.kubernetes.db.host.port" />
+        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+        <property name="com.intellij.clouds.kubernetes.db.container.port" />
+      </jdbc-additional-properties>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

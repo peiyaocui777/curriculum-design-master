@@ -74,7 +74,7 @@ public class BillView {
     public void showBill(){
         List<Bill> bills = billService.listBill();
         System.out.println("\n编号\t\t菜品号\t\t点餐数量\t\t价格\t\t餐桌号\t\t日期\t\t状态");
-        System.out.println("当前日期："+billService.getBill());
+        //System.out.println("当前日期："+billService.getBill());
         for (Bill bill : bills) {
             System.out.println(bill);
         }
