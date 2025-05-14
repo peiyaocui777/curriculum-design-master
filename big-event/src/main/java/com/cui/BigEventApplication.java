@@ -1,4 +1,4 @@
-package org;
+package com.cui;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

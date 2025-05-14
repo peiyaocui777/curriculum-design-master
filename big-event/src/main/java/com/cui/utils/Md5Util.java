@@ -1,4 +1,4 @@
-package org.utils;
+package com.cui.utils;
 
 
 import java.security.MessageDigest;

@@ -6,6 +6,7 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 import javax.sql.DataSource;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,9 @@ public class JDBCUtilsByDruid {
     static {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("src\\druid.properties"));
+            // 使用类加载器获取资源文件
+            InputStream is = JDBCUtilsByDruid.class.getClassLoader().getResourceAsStream("druid.properties");
+            properties.load(is);
             ds = DruidDataSourceFactory.createDataSource(properties);
         } catch (Exception e) {
             e.printStackTrace();

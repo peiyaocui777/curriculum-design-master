@@ -1,8 +1,8 @@
-package org.controller;
+package com.cui.controller;
 
-import org.pojo.Result;
-import org.pojo.User;
-import org.service.UserService;
+import com.cui.pojo.Result;
+import com.cui.pojo.User;
+import com.cui.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

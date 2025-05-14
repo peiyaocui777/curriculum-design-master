@@ -1,4 +1,4 @@
-package org.pojo;
+package com.cui.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package org.service;
+package com.cui.service;
 
-import org.pojo.User;
+import com.cui.pojo.User;
 
 /**
  * @author 崔佩谣

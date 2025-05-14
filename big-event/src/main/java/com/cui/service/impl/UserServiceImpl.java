@@ -1,11 +1,11 @@
-package org.service.impl;
+package com.cui.service.impl;
 
-import org.mapper.UserMapper;
-import org.pojo.User;
-import org.service.UserService;
+import com.cui.mapper.UserMapper;
+import com.cui.pojo.User;
+import com.cui.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.utils.Md5Util;
+import com.cui.utils.Md5Util;
 
 /**
  * @author 崔佩谣

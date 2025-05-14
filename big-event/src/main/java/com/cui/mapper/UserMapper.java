@@ -1,9 +1,9 @@
-package org.mapper;
+package com.cui.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.pojo.User;
+import com.cui.pojo.User;
 
 /**
  * @author 崔佩谣
@@ -17,6 +17,6 @@ public interface UserMapper {
     User findByUserName(String username);
 //添加
     @Insert("insert into user(username,password,create_time,update_time)"+
-    "values (#{username,#{password},now(),now()")
+    "values (#{username},#{password},now(),now()")
     void add(String username, String password);
 }
