@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+
 /**
  * @author 崔佩谣
  * @date 2025/5/14 16:39
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController //todo 这个注解什么作用
 @RequestMapping("/user")
 public class UserController {
+    @Resource
     private UserService userService;
     //实现注册
     @PostMapping("/register")
