@@ -3,11 +3,17 @@ package com.cui.controller;
 import com.cui.pojo.Result;
 import com.cui.pojo.User;
 import com.cui.service.UserService;
+import com.cui.utils.JwtUtil;
+import com.cui.utils.Md5Util;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author 崔佩谣
@@ -16,12 +22,13 @@ import javax.annotation.Resource;
  */
 @RestController //todo 这个注解什么作用 @RestController注解表示这是一个Controller类，处理HTTP请求，将方法的返回值转换成JSON格式给前端
 @RequestMapping("/user")//@RequestMapping注解用来映射url地址
+@Validated
 public class UserController {
     @Resource//注入依赖，与@Autowrite一样 从ioc容器里面把UserService取出放到这里
     private UserService userService;
     //实现注册
     @PostMapping("/register")//映射post请求
-    public Result register(String username,String password){
+    public Result register(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password){
     //根据用户名查询
         User u=userService.findByUserName(username);
         //判断是否被占用
@@ -36,4 +43,28 @@ public class UserController {
             return Result.error("用户名已被占用");
         }
     }
+    //登录的方法
+    @PostMapping("/login")
+    public Result<String> login(@Pattern(regexp = "^\\S{5,16}$") String username,@Pattern(regexp = "^\\S{5,16}$") String password){//Result<String>指定该方法返回值类型是字符串？gwt
+    //password是没有加密的密码
+        User loginUser = userService.findByUserName(username);
+        //查找用户名是否存在
+        if (loginUser==null){
+            return Result.error("用户名错误");
+        }
+        //用户名存在，对比密码是否正确（对传入的password加密后再比较）
+        if (Md5Util.getMD5String(password).equals(loginUser.getPassword())){//T登录成功
+            //定义一个map集合，存放loginUser的username password
+            Map<String,Object> claims = new HashMap<>();
+            claims.put("username",loginUser.getUsername());
+            claims.put("password",loginUser.getPassword());
+            //调用JwtUtils生成jwt令牌
+            String token = JwtUtil.genToken(claims);
+
+            return Result.success(token);
+        }
+        //密码错误，提示错误信息
+        return Result.error("密码错误");
+    }
 }
+
