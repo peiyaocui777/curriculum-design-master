@@ -1,12 +1,13 @@
 package com.cui.pojo;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor//全参构造方法
 @NoArgsConstructor//无参构造方法
 //统一响应结果
-
+@Data
 public class Result<T> {
     private Integer code;//业务状态码  0-成功  1-失败
     private String message;//提示信息

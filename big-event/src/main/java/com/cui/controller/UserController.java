@@ -14,13 +14,13 @@ import javax.annotation.Resource;
  * @date 2025/5/14 16:39
  * @description: Controller类
  */
-@RestController //todo 这个注解什么作用
-@RequestMapping("/user")
+@RestController //todo 这个注解什么作用 @RestController注解表示这是一个Controller类，处理HTTP请求，将方法的返回值转换成JSON格式给前端
+@RequestMapping("/user")//@RequestMapping注解用来映射url地址
 public class UserController {
-    @Resource
+    @Resource//注入依赖，与@Autowrite一样 从ioc容器里面把UserService取出放到这里
     private UserService userService;
     //实现注册
-    @PostMapping("/register")
+    @PostMapping("/register")//映射post请求
     public Result register(String username,String password){
     //根据用户名查询
         User u=userService.findByUserName(username);

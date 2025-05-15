@@ -1,7 +1,7 @@
 #引入mybatis的配置信息
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/big_event
     username: root
-    password: 111111
+    password: 123456
