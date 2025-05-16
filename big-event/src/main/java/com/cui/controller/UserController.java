@@ -6,9 +6,7 @@ import com.cui.service.UserService;
 import com.cui.utils.JwtUtil;
 import com.cui.utils.Md5Util;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.Pattern;
@@ -65,6 +63,15 @@ public class UserController {
         }
         //密码错误，提示错误信息
         return Result.error("密码错误");
+    }
+    //获取用户信息
+    @GetMapping("/userInfo")
+    public Result<User> userInfo(@RequestHeader(name = "Authorization") String token){
+       //解析token，获取username
+        Map<String, Object> map = JwtUtil.parseToken(token);
+        String username = (String) map.get("username");
+        User user = userService.findByUserName(username);
+        return Result.success(user);
     }
 }
 

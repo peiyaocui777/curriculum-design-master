@@ -16,8 +16,8 @@ import java.util.Map;
 @RequestMapping("/article")
 public class ArticleController {
 	@GetMapping("/list")
-	public Result<String> list(@RequestHeader(name = "Authorization") String token, HttpServletResponse response){
-		//验证token（token从参数列表传进来）
+	public Result<String> list(/* @RequestHeader(name = "Authorization") String token, HttpServletResponse response */){
+		/* //验证token（token从参数列表传进来）
 		try {
 			Map<String, Object> claims = JwtUtil.parseToken(token);//如果报错说明令牌有问题
 			//没有报错，显示信息
@@ -28,6 +28,7 @@ public class ArticleController {
 			response.setStatus(401);
 			//提示错误信息
 			return Result.error("未登录");
-		}
+		} */
+		return Result.success("所有文章信息。。");
 	}
 }

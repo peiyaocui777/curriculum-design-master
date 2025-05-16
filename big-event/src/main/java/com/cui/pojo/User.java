@@ -2,6 +2,7 @@ package com.cui.pojo;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 public class User {
     private Integer id;//主键ID
     private String username;//用户名
+    @JsonIgnore//把pwd转化为Json字符串时忽略不显示 // TODO 有的注释名字一样没有效果？
     private String password;//密码
     private String nickname;//昵称
     private String email;//邮箱
