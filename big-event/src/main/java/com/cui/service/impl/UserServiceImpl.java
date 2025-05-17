@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.cui.utils.Md5Util;
 
+import java.time.LocalDateTime;
+
 /**
  * @author 崔佩谣
  * @date 2025/5/14 16:44
@@ -16,6 +18,13 @@ import com.cui.utils.Md5Util;
 public class UserServiceImpl implements UserService {
     @Autowired //?
     private UserMapper userMapper;
+
+    @Override
+    public void update(User user) {
+        user.setUpdateTime(LocalDateTime.now());
+        userMapper.update(user);
+    }
+
     @Override
     public User findByUserName(String username) {
         //调用mapper

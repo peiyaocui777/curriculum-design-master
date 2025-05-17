@@ -8,8 +8,11 @@ import com.cui.pojo.User;
  * @description: userservice接口
  */
 public interface UserService {
-    //根据用户名查询用户
+	void update(User user);
+
+	//根据用户名查询用户
     User findByUserName(String username);
     //注册
     void register(String username, String password);
+
 }

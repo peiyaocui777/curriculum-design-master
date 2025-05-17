@@ -5,6 +5,7 @@ import com.cui.pojo.User;
 import com.cui.service.UserService;
 import com.cui.utils.JwtUtil;
 import com.cui.utils.Md5Util;
+import com.cui.utils.ThreadLocalUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,12 +67,19 @@ public class UserController {
     }
     //获取用户信息
     @GetMapping("/userInfo")
-    public Result<User> userInfo(@RequestHeader(name = "Authorization") String token){
+    public Result<User> userInfo(/* @RequestHeader(name = "Authorization") String token */){
        //解析token，获取username
-        Map<String, Object> map = JwtUtil.parseToken(token);
+        //Map<String, Object> map = JwtUtil.parseToken(token);
+        Map<String,Object> map = ThreadLocalUtil.get();
         String username = (String) map.get("username");
         User user = userService.findByUserName(username);
         return Result.success(user);
+    }
+    //更新用户信息
+    @PutMapping("/update")
+    public Result update(@RequestBody User user){//@RequestBody注解把JSON格式转化为目标格式？
+      userService.update(user);
+      return Result.success();
     }
 }
 

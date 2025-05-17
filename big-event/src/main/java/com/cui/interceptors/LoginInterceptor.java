@@ -2,6 +2,7 @@ package com.cui.interceptors;
 
 import com.cui.pojo.Result;
 import com.cui.utils.JwtUtil;
+import com.cui.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -25,7 +26,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 		log.info("{}被拦截URL ", request.getRequestURI());
 		//
 		try {
-			Map<String, Object> claims = JwtUtil.parseToken(token);// 如果报错说明令牌有问题
+			Map<String, Object> claims = JwtUtil.parseToken(token);//
+			ThreadLocalUtil.set(claims);
 			// 没有报错，放行
 			return true;
 		} catch (Exception e) {
@@ -35,5 +37,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 			// 提示错误信息
 			return false;
 		}
+	}
+	//删除线程
+
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+		ThreadLocalUtil.remove();
 	}
 }
