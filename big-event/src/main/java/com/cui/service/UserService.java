@@ -1,6 +1,7 @@
 package com.cui.service;
 
 import com.cui.pojo.User;
+import org.hibernate.validator.constraints.URL;
 
 /**
  * @author 崔佩谣
@@ -14,5 +15,8 @@ public interface UserService {
     User findByUserName(String username);
     //注册
     void register(String username, String password);
-
+    //更新头像
+	void updateAvatar(@URL String avatarUrl);
+	//更新pwd
+	void updatePwd(String newPwd);
 }

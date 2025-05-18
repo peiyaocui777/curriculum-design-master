@@ -3,11 +3,13 @@ package com.cui.service.impl;
 import com.cui.mapper.UserMapper;
 import com.cui.pojo.User;
 import com.cui.service.UserService;
+import com.cui.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.cui.utils.Md5Util;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author 崔佩谣
@@ -38,5 +40,22 @@ public class UserServiceImpl implements UserService {
         String md5String = Md5Util.getMD5String(password);
         //添加username password
         userMapper.add(username,md5String);//加密后的字符串
+    }
+
+    @Override
+    public void updateAvatar(String avatarUrl) {
+        //从ThreadLocal获取用户id
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer id = (Integer) map.get("id");
+        userMapper.updateAvatar(avatarUrl,id);
+    }
+
+    @Override
+    public void updatePwd(String newPwd) {
+        //根据id更新
+        Map<String,Object> map = ThreadLocalUtil.get();
+        Integer id = (Integer) map.get("id");
+        //更新//newPwd加密后再传
+        userMapper.updatePwd(Md5Util.getMD5String(newPwd),id);
     }
 }
