@@ -22,6 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		String token = request.getHeader("Authorization");
+		log.info("收到的Authorization头值: {}", token);
 		System.out.println(request.getRequestURI() + "被拦截URL");
 		log.info("{}被拦截URL ", request.getRequestURI());
 		//
