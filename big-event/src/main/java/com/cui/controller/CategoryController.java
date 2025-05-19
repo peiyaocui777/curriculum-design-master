@@ -46,7 +46,7 @@ public class CategoryController {
 	}
 	//更新文章分类
 	@PutMapping
-	public Result<Category> update(@RequestBody@Validated Category category){//前端传进来的数据放在Category中
+	public Result<Category> update(@RequestBody @Validated Category category){//前端传进来的数据放在Category中
 		//数据校验
 		//更新
 		categoryService.update(category);
