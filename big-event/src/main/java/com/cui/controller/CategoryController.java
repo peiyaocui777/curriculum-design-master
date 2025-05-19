@@ -3,12 +3,13 @@ package com.cui.controller;
 import com.cui.pojo.Category;
 import com.cui.pojo.Result;
 import com.cui.service.CategoryService;
+import com.cui.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xuYuYu
@@ -22,9 +23,33 @@ public class CategoryController {
 	private CategoryService categoryService;
 
 	// 新增文章分类
-	@PostMapping("/add")
+	@PostMapping
 	public Result add(@RequestBody @Validated Category category) {
 		categoryService.add(category);//
+		return Result.success();
+	}
+	//获取列表
+	@GetMapping
+	public Result<List<Category>> list(){
+     List<Category>cs=categoryService.list();
+		return Result.success(cs);
+	}
+	//获取文章分类详情
+	@GetMapping("/detail")
+	public Result<Category> findById(@RequestParam Integer id){//1.相应参数不是一组Category 2.请求参数是从前端传过来的
+
+		/* Map<String,Object> map = ThreadLocalUtil.get();
+		Integer id= (Integer) map.get("id"); //todo ThreadLocalUtil放的是用户相关的信息*/
+		//获取
+		Category c=categoryService.findById(id);
+		return Result.success(c);
+	}
+	//更新文章分类
+	@PutMapping
+	public Result<Category> update(@RequestBody@Validated Category category){//前端传进来的数据放在Category中
+		//数据校验
+		//更新
+		categoryService.update(category);
 		return Result.success();
 	}
 }
