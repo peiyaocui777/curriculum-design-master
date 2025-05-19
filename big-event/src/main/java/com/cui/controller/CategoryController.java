@@ -22,7 +22,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 
 	// 新增文章分类
-@PostMapping
+	@PostMapping("/add")
 	public Result add(@RequestBody @Validated Category category) {
 		categoryService.add(category);//
 		return Result.success();
