@@ -42,6 +42,11 @@ public class CategoryController {
 		Integer id= (Integer) map.get("id"); //todo ThreadLocalUtil放的是用户相关的信息*/
 		//获取
 		Category c=categoryService.findById(id);
+		//判断
+		if (c==null){
+			return Result.error("没有该分类");
+		}
+		//返回
 		return Result.success(c);
 	}
 	//更新文章分类
@@ -50,6 +55,7 @@ public class CategoryController {
 		//数据校验
 		//更新
 		categoryService.update(category);
+		//返回
 		return Result.success();
 	}
 }
