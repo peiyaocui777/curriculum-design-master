@@ -25,7 +25,9 @@ public class CategoryController {
 	// 新增文章分类
 	@PostMapping
 	public Result add(@RequestBody @Validated Category category) {
+		// 调用categoryService的add方法，将category作为参数传入
 		categoryService.add(category);//
+		// 返回成功结果
 		return Result.success();
 	}
 	//获取列表
