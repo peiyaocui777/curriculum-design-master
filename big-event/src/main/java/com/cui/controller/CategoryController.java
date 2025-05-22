@@ -60,4 +60,11 @@ public class CategoryController {
 		//返回
 		return Result.success();
 	}
+	//删除文章分类
+	@DeleteMapping
+	public Result delete(@RequestParam Integer id){
+		// 根据id删除数据
+		categoryService.delete(id);
+		return Result.success();
+	}
 }
