@@ -1,6 +1,7 @@
 package com.cui.service;
 
 import com.cui.pojo.Article;
+import com.cui.pojo.PageBean;
 
 /**
  * @author: xuYuYu
@@ -10,4 +11,6 @@ import com.cui.pojo.Article;
 public interface ArticleService {
 	//新增文章
 	void add(Article article);
+ //条件列表分页查询
+	PageBean<Article> list(Integer pageNum, Integer pageSize, Integer categoryId, String state);
 }
