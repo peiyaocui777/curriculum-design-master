@@ -7,6 +7,9 @@ import com.cui.utils.JwtUtil;
 import com.cui.utils.Md5Util;
 import com.cui.utils.ThreadLocalUtil;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.Pattern;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 崔佩谣
@@ -27,6 +31,8 @@ import java.util.Map;
 public class UserController {
 	@Resource// 注入依赖，与@Autowrite一样 从ioc容器里面把UserService取出放到这里
 	private UserService userService;
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
 	// 实现注册
 	@PostMapping("/register")// 映射post请求
@@ -64,6 +70,9 @@ public class UserController {
 			claims.put("id",loginUser.getId());
 			// 调用JwtUtils生成jwt令牌
 			String token = JwtUtil.genToken(claims);
+			//token存入redis
+			ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+			stringStringValueOperations.set(token,token,1, TimeUnit.HOURS);
 
 			return Result.success(token);
 		}
@@ -98,7 +107,7 @@ public class UserController {
 	}
 	//更新密码
 	@PatchMapping("/updatePwd")
-	public Result updatePwd(@RequestBody Map<String,String> params){
+	public Result updatePwd(@RequestBody Map<String,String> params,@RequestHeader("Authorization") String token){
      //数据校验
 		String oldPwd = params.get("old_pwd");
 		String newPwd = params.get("new_pwd");
@@ -127,6 +136,9 @@ public class UserController {
 		}
 		//更新
 		userService.updatePwd(newPwd);
+		//更新后原密码失效
+		ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+		stringStringValueOperations.getAndDelete(token);
 		return Result.success();
 	}
 }

@@ -4,6 +4,9 @@ import com.cui.pojo.Result;
 import com.cui.utils.JwtUtil;
 import com.cui.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,6 +22,8 @@ import java.util.Map;
 @Component
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		String token = request.getHeader("Authorization");
@@ -27,6 +32,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 		log.info("{}被拦截URL ", request.getRequestURI());
 		//
 		try {
+			//redis中的token是否存在
+			ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+			String redisToken = stringStringValueOperations.get(token);
+			if (redisToken==null){
+				 throw new RuntimeException();
+			}
 			Map<String, Object> claims = JwtUtil.parseToken(token);//
 			ThreadLocalUtil.set(claims);
 			// 没有报错，放行
