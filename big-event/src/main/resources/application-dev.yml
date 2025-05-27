@@ -11,9 +11,7 @@ spring:
     port: 6379
     timeout: 5000
   #    password: 123456
-  profiles:
-    # 环境配置
-    active: dev
+
 
 mybatis:
   configuration:
